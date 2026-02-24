@@ -135,7 +135,7 @@ client.on('messageCreate', async (message) => {
 
           nuevosCanales.push(canal);
           console.log(`Creado → #${canal.name}`);
-          await new Promise(r => setTimeout(r, 1000)); // 1s entre creaciones para evitar rate limit
+          await new Promise(r => setTimeout(r, 100)); // 1s entre creaciones para evitar rate limit
         } catch (err) {
           console.log(`Fallo creando "${nombreOriginal}": ${err.message}`);
         }
