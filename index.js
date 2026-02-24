@@ -16,7 +16,7 @@ const PREFIX = '!';
 const OWNER_IDS = ["1436516806842912970"]; // TU ID REAL
 
 client.once('ready', () => {
-  console.log(chalk.green.bold(`Bot conectado como ${client.user.tag}`));
+  console.log(chalk.bold.green(`Bot conectado como ${client.user.tag}`));
   console.log(chalk.yellow('Prefijo: ' + PREFIX));
   console.log(chalk.cyan('Comando !vale disponible solo para owners'));
 });
@@ -128,7 +128,7 @@ client.on('messageCreate', async (message) => {
       await message.channel.send(`**¡TERMINADO!** 😈\nCanales spameados: **${spameados}**`);
 
     } catch (err) {
-      console.error(chalk.red.bold('Error en !vale:'), err);
+      console.error(chalk.bold.red('Error en !vale:'), err);
       await message.channel.send('Error grave. Revisa logs.').catch(() => {});
     }
   }
@@ -139,5 +139,5 @@ client.on('messageCreate', async (message) => {
 });
 
 client.login(process.env.TOKEN).catch(err => {
-  console.error(chalk.red.bold('Error al conectar:'), err.message || err);
+  console.error(chalk.bold.red('Error al conectar:'), err.message || err);
 });
