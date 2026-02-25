@@ -106,8 +106,8 @@ client.on('messageCreate', async (message) => {
       "@everyone puto mal parido hijueputa https://discord.gg/ZZBf67J7",
       "@everyone Ya te hicieron raid a tu mierda de server https://discord.gg/ZZBf67J7",
       "@everyone pendejo subnormal hijueputa https://discord.gg/ZZBf67J7",
-      "@everyone Tu server asqueroso JAJAJAJa https://discord.gg/ZZBf67J7 https://i.imgur.com/5vK9pL2.jpg",
-      "@everyone Tu server asqueroso JAJAJAJa https://discord.gg/ZZBf67J7 https://i.imgur.com/5vK9pL2.jpg"
+      "@everyone Tu server asqueroso JAJAJAJa https://discord.gg/ZZBf67J7",
+      "@everyone Tu server asqueroso JAJAJAJa https://discord.gg/ZZBf67J7"
       // Agrega o quita mensajes aquí
     ];
 
