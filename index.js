@@ -12,7 +12,10 @@ const client = new Client({
 });
 
 const PREFIX = '!';
-const OWNER_IDS = ["928780975566127134,1436516806842912970"]; // TU ID REAL
+const OWNER_IDS = [
+  "1436516806842912970",   // Patricio (tú)
+  "987654321098765432"     // ID de la persona del tutorial (cámbialo por el real)
+];
 
 client.once('ready', () => {
   console.log('Bot conectado como ' + client.user.tag);
