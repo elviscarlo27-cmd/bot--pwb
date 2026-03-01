@@ -17,66 +17,6 @@ const PREFIX = '!';
 // const OWNER_IDS = ["1436516806842912970"]; // comentado o borrado
 
 client.once('ready', () => {
-  // Registrar comandos slash al iniciar el bot
-client.once('ready', async () => {
-  console.log('Bot conectado como ' + client.user.tag);
-
-  const commands = [
-    {
-      name: 'vale',
-      description: 'Spamea un mensaje personalizado en el canal actual',
-      options: [
-        {
-          name: 'mensaje',
-          description: 'El mensaje que querés spamear',
-          type: 3, // STRING
-          required: true
-        },
-        {
-          name: 'veces',
-          description: 'Cuántas veces spamear (máximo 50)',
-          type: 4, // INTEGER
-          required: false
-        }
-      ]
-    }
-  ];
-
-  try {
-    await client.application.commands.set(commands);
-    console.log('Comando /vale registrado correctamente');
-  } catch (err) {
-    console.error('Error al registrar /vale:', err);
-  }
-});
-
-// Ejecutar el comando slash
-client.on('interactionCreate', async (interaction) => {
-  if (!interaction.isChatInputCommand()) return;
-
-  if (interaction.commandName === 'vale') {
-    const mensaje = interaction.options.getString('mensaje');
-    let veces = interaction.options.getInteger('veces') || 10;
-
-    // Limitar a 50 para no ser baneado instantáneamente
-    veces = Math.min(veces, 50);
-
-    await interaction.reply({
-      content: `**Spameando "${mensaje}" ${veces} veces...** 😈`,
-      ephemeral: true  // solo tú ves la confirmación
-    });
-
-    for (let i = 0; i < veces; i++) {
-      await interaction.channel.send(mensaje).catch(() => {});
-      await new Promise(r => setTimeout(r, 800)); // delay para evitar rate limit
-    }
-
-    await interaction.followUp({
-      content: '**Spam finalizado.** 🔥',
-      ephemeral: true
-    });
-  }
-});
   console.log('Bot conectado como ' + client.user.tag);
   console.log('Prefijo: ' + PREFIX);
 });
